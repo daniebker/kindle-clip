@@ -1,8 +1,11 @@
 const { parseFile } = require("./highlightParser");
 const { writeFile } = require("./org-writer");
+const { groupByBook } = require("./utils/groupByBook");
 
 const filePath = process.argv[2];
-console.log(filePath);
+const outPath = process.argv[3];
 const highlights = parseFile(filePath);
 
-writeFile(highlights);
+const groupedHighlights = groupByBook(highlights);
+
+writeFile(groupedHighlights, outPath);

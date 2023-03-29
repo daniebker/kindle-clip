@@ -1,8 +1,22 @@
+const crypto = require("crypto");
+
+function createBookId(highlight) {
+  const bookAndAuthor = `${highlight.author.firstName} ${highlight.author.surname} ${highlight.title}`;
+  const bookId = crypto.createHash("sha1").update(bookAndAuthor).digest("hex");
+  return bookId;
+}
+
 function groupByBook(highlights) {
   const books = {};
   highlights.forEach((highlight) => {
     if (!books[highlight.title]) {
-      books[highlight.title] = { highlights: [], author: highlight.author };
+      const bookId = createBookId(highlight);
+
+      books[highlight.title] = {
+        highlights: [],
+        author: highlight.author,
+        id: bookId,
+      };
     }
 
     // only push if highlights doesnt include a highlight with this id

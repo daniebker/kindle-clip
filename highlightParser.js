@@ -1,16 +1,6 @@
 const crypto = require("crypto");
 const fs = require("fs");
-/*
- * Parse the page number from the book info string
- * @param {string} bookInfo - the book info string
- * @returns {number} - the page number
- * @example
- * parsePageNumber('- Your Highlight on page 98 | location 2052-2052 | Added on Tuesday, 28 March 2023 13:43:14  ')
- **/
-const parsePageNumber = (bookInfo) => {
-  const pageNumberMatch = bookInfo.match(/page ([0-9]+)/);
-  return pageNumberMatch ? +pageNumberMatch[1] : "";
-};
+const { parsePageNumber } = require("./utils/parsePageNumber");
 
 /*
  * Parse the title line and extracts the author and title
@@ -104,6 +94,7 @@ const highlightParser = (clipping) => {
     const { author, bookTitle } = parseTitle(lines[0]);
     const content = lines.slice(2).join("\n").trim();
     const id = crypto.createHash("sha1").update(content).digest("hex");
+
     return {
       id,
       author,
