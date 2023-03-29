@@ -1,0 +1,20 @@
+{
+  "name": "kindle-clip",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "dependencies": {
+    "chrono-node": "^2.6.2"
+  },
+  "devDependencies": {
+    "@babel/preset-env": "^7.20.2",
+    "babel-eslint": "^10.1.0",
+    "babel-preset-env": "^1.7.0",
+    "jest": "^29.5.0"
+  },
+  "scripts": {
+    "test": "jest"
+  },
+  "author": "",
+  "license": "ISC"
+}
