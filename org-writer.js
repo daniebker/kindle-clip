@@ -40,7 +40,7 @@ function writeFile(books, outPath, templateName) {
       ? existingFile
       : generateFileName(outPath, bookAndAuthor);
 
-    const file = fs.createWriteStream(orgFileName, {
+    const file = fs.createWriteStream(`${outPath}/${orgFileName}`, {
       flags: "a",
     });
 
