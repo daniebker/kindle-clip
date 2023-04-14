@@ -1,0 +1,22 @@
+{{#each this}}
+* {{headline}} :kindle:quote:
+:PROPERTIES:
+:PAGE: {{page}}
+:LOCATION: {{location}}
+:ID: {{id}}
+:DATE: {{date}}
+:END:
+
+#+BEGIN_QUOTE
+{{content}}
+#+END_QUOTE
+
+{{#if note}}
+** Note :kindle:note:
+:PROPERTIES:
+:DATE: {{note.date}}
+:END:
+
+{{note.content}}
+{{/if}}
+{{/each}}

@@ -87,7 +87,6 @@ const parseFile = (file) => {
 
 const highlightParser = (clipping) => {
   const lines = clipping.trim().split("\n");
-
   try {
     const type = lines[1].trim().match(/Your (Highlight|Note|Bookmark)/)[1];
     const { page, location, date } = parseInfo(lines);

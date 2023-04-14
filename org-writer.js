@@ -1,40 +1,19 @@
 const fs = require("fs");
+const handlebars = require("handlebars");
+
 const {
   createOutputDirIfNotExists,
   findFileInDirectory,
 } = require("./utils/dir");
 const { sanitiseString } = require("./utils/sanitiseString");
 
-function writeNote(file, note) {
-  file.write(`** Note :kindle:\n`);
-  file.write(`:PROPERTIES:\n`);
-  file.write(`:DATE: ${note.date}\n`);
-  file.write(`:END:\n\n`);
-  file.write(`${note.content}\n`);
-}
-
-function writeHighlight(file, headline, highlight) {
-  file.write(`* ${headline} :kindle:quote: \n`);
-  file.write(`:PROPERTIES:\n`);
-  file.write(`:PAGE: ${highlight.page}\n`);
-  file.write(`:LOCATION: ${highlight.location}\n`);
-  file.write(`:ID: ${highlight.id}\n`);
-  file.write(`:DATE: ${highlight.date}\n`);
-  file.write(`:END:\n\n`);
-  file.write("#+BEGIN_QUOTE\n");
-  file.write(`${highlight.content}\n`);
-  file.write("#+END_QUOTE\n\n");
-}
-
-function writeFileHeader(file, bookId, title) {
-  file.write(`:PROPERTIES:\n`);
-  file.write(`:ID: ${bookId}\n`);
-  file.write(`:END:\n`);
-  file.write(`#+TITLE: ${title}`);
+function writeFileHeader(file, bookId, title, templateName) {
+  const rawTemplate = fs.readFileSync(`./templates/${templateName}/header.hbs`, 'utf-8')
+  const template = handlebars.compile(rawTemplate, { noEscape: true })
+  file.write(template({ bookId, title }))
 }
 
 function generateFileName(outPath, bookAndAuthor) {
-  console.log(outPath);
   const timestamp = new Date()
     .toISOString()
     .replace(/[-:]/g, "")
@@ -47,7 +26,7 @@ function generateFileName(outPath, bookAndAuthor) {
  * It should write the highlights to an org file format
  * @param {array} highlights - the highlights to write
  **/
-function writeFile(books, outPath) {
+function writeFile(books, outPath, templateName) {
   createOutputDirIfNotExists(outPath);
 
   Object.keys(books).forEach((book) => {
@@ -71,22 +50,23 @@ function writeFile(books, outPath) {
 
     if (!existingContent) {
       const fileTitle = `${book} - ${books[book].author.surname}, ${books[book].author.firstName}\n\n`;
-      writeFileHeader(file, books[book].id, fileTitle);
+      writeFileHeader(file, books[book].id, fileTitle, templateName);
     }
 
-    books[book].highlights.forEach((highlight) => {
-      const headline = highlight.content.split(" ").slice(0, 5).join(" ");
+    const preparedHighlights = books[book].highlights
+      .filter(highlight => !existingContent.includes(`${highlight.id}`))
+      .map((highlight) => {
+        const headline = highlight.content.split(" ").slice(0, 5).join(" ");
+        // TODO: use chatgpt to create a headline from the content
 
-      if (existingContent && existingContent.includes(`:ID: ${highlight.id}`)) {
-        return;
-      }
+        return { headline, ...highlight };
+      });
 
-      writeHighlight(file, headline, highlight);
-      if (highlight.note) {
-        writeNote(file, highlight.note);
-      }
-      file.write(`\n`);
-    });
+    const rawTemplate = fs.readFileSync(`./templates/${templateName}/content.hbs`, 'utf-8')
+    const template = handlebars.compile(rawTemplate, { noEscape: true })
+
+    file.write(template(preparedHighlights))
+    //TODO: Use chatGPT give the context of all notes to create a summary of the book
     file.end();
   });
 }
