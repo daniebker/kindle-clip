@@ -1,0 +1,20 @@
+{{#each this}}
+# {{headline}}
+
+> {{content}}
+> - {{#if page}}Page {{page}},{{/if}}{{#if location}} Location {{location}},{{/if}} {{#if date}}Date {{date}}{{/if}}
+
+- {{id}}
+
+#Kindle #Quote
+
+{{#if note}}
+## Note
+
+{{note.content}}
+- {{note.date}}
+
+#KindleNote
+
+{{/if}}
+{{/each}}

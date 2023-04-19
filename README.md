@@ -1,9 +1,11 @@
 # Kindle-clip
 
+[![asciicast](https://asciinema.org/a/o86OlQSHf2VkkMCs1neQjjwok.svg)](https://asciinema.org/a/o86OlQSHf2VkkMCs1neQjjwok)
+
 This package parses a kindle `MyClippings.txt` and outputs to a variety of formats. 
 
 Using the plugin architecture it's possible to add new types or processors to export clippings to a variety of formats. 
-  * 
+
 ## Features
 
 - Adds an ID to each highlight. When importing, the processor can check the target file to see if the id already exists. If it does then the highlight can be skipped. 

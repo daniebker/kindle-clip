@@ -1,6 +1,6 @@
 {
   "name": "kindle-clip",
-  "version": "1.0.0",
+  "version": "0.2.0",
   "description": "",
   "main": "index.js",
   "dependencies": {
@@ -17,5 +17,5 @@
     "test": "jest"
   },
   "author": "",
-  "license": "ISC"
+  "license": "GNU GPLv3"
 }

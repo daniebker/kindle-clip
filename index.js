@@ -1,5 +1,5 @@
 const { parseFile } = require("./highlightParser");
-const { writeFile } = require("./org-writer");
+const { writeFile } = require("./file-writer");
 const { groupByBook } = require("./utils/groupByBook");
 
 const filePath = process.argv[2];

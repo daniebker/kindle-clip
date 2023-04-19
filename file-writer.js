@@ -13,13 +13,13 @@ function writeFileHeader(file, bookId, title, templateName) {
   file.write(template({ bookId, title }))
 }
 
-function generateFileName(outPath, bookAndAuthor) {
+function generateFileName(bookAndAuthor, format) {
   const timestamp = new Date()
     .toISOString()
     .replace(/[-:]/g, "")
     .replace(/\..+/, "")
     .replace(/T/, "");
-  return `${outPath}/${timestamp}-${bookAndAuthor}.org`;
+  return `${timestamp}-${bookAndAuthor}.${format}`;
 }
 
 /*
@@ -36,16 +36,19 @@ function writeFile(books, outPath, templateName) {
 
     const existingFile = findFileInDirectory(outPath, `${bookAndAuthor}`);
 
-    const orgFileName = existingFile
-      ? existingFile
-      : generateFileName(outPath, bookAndAuthor);
+    // read config from template dir
+    const formatConfig = JSON.parse(fs.readFileSync(`./templates/${templateName}/config.json`, 'utf-8'))
 
-    const file = fs.createWriteStream(`${outPath}/${orgFileName}`, {
+    const fileName = existingFile
+      ? existingFile
+      : generateFileName(bookAndAuthor, formatConfig.format);
+
+    const file = fs.createWriteStream(`${outPath}/${fileName}`, {
       flags: "a",
     });
 
     const existingContent = existingFile
-      ? fs.readFileSync(`${outPath}/${orgFileName}`, "utf-8")
+      ? fs.readFileSync(`${outPath}/${fileName}`, "utf-8")
       : "";
 
     if (!existingContent) {
