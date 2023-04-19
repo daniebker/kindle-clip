@@ -1,7 +1,5 @@
 # Kindle-clip
 
-[![asciicast](https://asciinema.org/a/o86OlQSHf2VkkMCs1neQjjwok.svg)](https://asciinema.org/a/o86OlQSHf2VkkMCs1neQjjwok)
-
 This package parses a kindle `MyClippings.txt` and outputs to a variety of formats. 
 
 Using the plugin architecture it's possible to add new types or processors to export clippings to a variety of formats. 
