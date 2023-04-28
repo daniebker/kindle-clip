@@ -5,7 +5,8 @@
   "main": "index.js",
   "dependencies": {
     "chrono-node": "^2.6.2",
-    "handlebars": "^4.7.7"
+    "handlebars": "^4.7.7",
+    "openai": "^3.2.1"
   },
   "devDependencies": {
     "@babel/preset-env": "^7.20.2",
