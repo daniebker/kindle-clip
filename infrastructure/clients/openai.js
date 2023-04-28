@@ -17,9 +17,9 @@ async function generateTitleFor(text) {
 
   try {
     const completion = await openai.createCompletion({
-      model: "text-ada-001",
+      model: "text-curie-001",
       prompt: generatePrompt(text),
-      temperature: 0.3,
+      temperature: 0.6,
     });
     return completion.data.choices[0].text
   } catch (error) {
