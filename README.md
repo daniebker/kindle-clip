@@ -39,7 +39,7 @@ node index.js ~/path/to/My Clippings.txt ~/output/path/ markdown true
 
 #### IMPORTANT
 
-[OpenAI is not free](https://openai.com/pricing) and using the API to generate titles will cost money. I recommend [setting up usage limits](https://platform.openai.com/docs/guides/production-best-practices/managing-billing-limits) in the OpenAI dashboard so you don't accidentally spend a ton of money parsing your files. I am not responsible if your OpenAI bill sky rockets. Run a test first and [monitor your usage](https://platform.openai.com/account/usage) to ensure you're not burning through tokens.
+[OpenAI is not free](https://openai.com/pricing) and using the API to generate titles will cost money. Kindle-Clip is using the `text-curie-001` model which costs $0.0020 / 1K tokens as of 2023-04-28. I recommend [setting up usage limits](https://platform.openai.com/docs/guides/production-best-practices/managing-billing-limits) in the OpenAI dashboard so you don't accidentally spend a ton of money parsing your files. I am not responsible if your OpenAI bill sky rockets. Run a test first and [monitor your usage](https://platform.openai.com/account/usage) to ensure you're not burning through tokens.
 
 ## Templating 
 
