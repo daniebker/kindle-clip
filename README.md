@@ -13,7 +13,6 @@ Using the plugin architecture it's possible to add new types or processors to ex
 node index.js ~/path/to/My Clippings.txt ~/output/path/ markdown
 ```
 
-
 ## Features {#features}
 
 -   Adds an ID to each highlight. When importing, the processor can check the target file to see if the id already exists. If it does then the highlight can be skipped.
@@ -38,6 +37,9 @@ Then run the command line with AI enabled:
 node index.js ~/path/to/My Clippings.txt ~/output/path/ markdown true
 ```
 
+#### IMPORTANT
+
+[OpenAI is not free](https://openai.com/pricing) and using the API to generate titles will cost money. I recommend [setting up usage limits](https://platform.openai.com/docs/guides/production-best-practices/managing-billing-limits) in the OpenAI dashboard so you don't accidentally spend a ton of money parsing your files. I am not responsible if your OpenAI bill sky rockets. Run a test first and [monitor your usage](https://platform.openai.com/account/usage) to ensure you're not burning through tokens.
 
 ## Templating {#templating}
 
