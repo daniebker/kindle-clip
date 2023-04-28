@@ -21,7 +21,6 @@ async function generateTitleFor(text) {
       prompt: generatePrompt(text),
       temperature: 0.3,
     });
-    console.log("response", completion.data.choices[0].text)
     return completion.data.choices[0].text
   } catch (error) {
     // Consider adjusting the error handling logic for your use case

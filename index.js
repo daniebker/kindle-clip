@@ -11,8 +11,6 @@ async function main() {
 
   const groupedHighlights = groupByBook(highlights);
 
-  console.log(`aiEnabled: `, aiEnabled)
-
   await writeFile(groupedHighlights, outPath, template, aiEnabled)
 }
 
