@@ -6,7 +6,6 @@ This package parses a kindle \`MyClippings.txt\` and outputs to a variety of for
 
 Using the plugin architecture it's possible to add new types or processors to export clippings to a variety of formats.
 
-
 ## Usage 
 
 ```shell
