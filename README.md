@@ -1,6 +1,6 @@
 # Kindle-clip
 
-[!](./assets/ai_demo.gif)
+![](./assets/ai_demo.gif)
 
 This package parses a kindle \`MyClippings.txt\` and outputs to a variety of formats.
 
