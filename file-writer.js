@@ -1,11 +1,15 @@
 const fs = require("fs");
 const handlebars = require("handlebars");
-const { generateTitleFor } = require("./infrastructure/clients/openai");
+const { registerHelpers } = require("./infrastructure/handlebars/formatting")
+const { generateTitleFor, generateTagsFor } = require("./infrastructure/clients/openai");
 
 const {
   createOutputDirIfNotExists,
   findFileInDirectory,
 } = require("./utils/dir");
+
+registerHelpers(handlebars)
+
 const { sanitiseString } = require("./utils/sanitiseString");
 
 function writeFileHeader(file, bookId, title, templateName) {
@@ -60,13 +64,17 @@ async function writeFile(books, outPath, templateName, aiEnabled) {
       .filter(highlight => !existingContent.includes(`${highlight.id}`))
       .map(async (highlight) => {
         let headline = "";
+        let tags = "";
         if (aiEnabled) {
-          headline = await generateTitleFor(highlight.content);
+          headlinePromise = generateTitleFor(highlight.content);
+          tagsPromise = generateTagsFor(highlight.content);
+          [headline, tags] = await Promise.all([headlinePromise, tagsPromise])
+          console.log(tags)
         } else {
           headline = highlight.content.split(" ").slice(0, 5).join(" ");
         }
 
-        return { headline, ...highlight };
+        return { headline, tags, ...highlight };
       });
 
     const preparedHighlights = await Promise.all(preparedHighlightsPromises)

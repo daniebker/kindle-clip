@@ -1,5 +1,5 @@
 {{#each this}}
-* {{headline}}
+* {{headline}} {{sandwich (join tags ":") ":"}}
 :PROPERTIES:
 :PAGE: {{page}}
 :LOCATION: {{location}}
@@ -10,6 +10,7 @@
 #+BEGIN_QUOTE
 {{content}}
 #+END_QUOTE
+
 
 {{#if note}}
 ** Note
