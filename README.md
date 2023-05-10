@@ -139,3 +139,6 @@ For each highlight you have access to the following information.
 2.  In the new folder create a file named `config.json` this is the config for the template. All we need right now is to add a `extension` property to the object. This should be the file extension you want to write to. In the case of markdown it would be `md`. You'll end up with something like `{ extension: "md" }`
 3.  Create another file called `header.hbs` in this file add the heading for the file you want. This template will only be called once when anew file is created. See the section on file headers for [a full list of available prooperties.](#file-header)
 4.  Finally add a `content.hbs` file. This is called for every highlight and accompanying note. A full list of available properties [is linked in the section above](#main-content).
+## Contribute
+- I ❤️ pull requests and bug reports!
+- Don't hesitate to tell me my JavaScript, but please tell me why.
