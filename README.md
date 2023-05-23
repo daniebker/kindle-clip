@@ -141,4 +141,4 @@ For each highlight you have access to the following information.
 4.  Finally add a `content.hbs` file. This is called for every highlight and accompanying note. A full list of available properties [is linked in the section above](#main-content).
 ## Contribute
 - I ❤️ pull requests and bug reports!
-- Don't hesitate to tell me my JavaScript, but please tell me why.
+- Don't hesitate to tell me my JavaScript sucks, but please tell me why.
