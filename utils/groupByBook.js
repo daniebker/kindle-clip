@@ -25,6 +25,7 @@ function groupByBook(highlights) {
         (existingHighlight) => existingHighlight.id === highlight.id
       ).length === 0
     ) {
+      console.info(`Adding highlight ${highlight.id} to book ${highlight.title}`);
       books[highlight.title].highlights.push(highlight);
     }
   });
