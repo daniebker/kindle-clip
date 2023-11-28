@@ -8,14 +8,14 @@ const givenAHighlight = (highlight) => {
 
 describe("highlightParser", () => {
   it("should skip bookmarks", () => {
-    const { highlight } = givenAHighlight(`Life Time (Foster, Russell)
+    givenAHighlight(`Life Time (Foster, Russell)
 - Your Bookmark on page 98 | location 2052-2052 | Added on Tuesday, 28 March 2023 13:43:14`);
     const parsedHighlight = parseFile("~/some/path");
     expect(parsedHighlight).toEqual([]);
   });
 
   it("should extract a note and associate it with a highlight", () => {
-    const { highlight } = givenAHighlight(`Life Time (Foster, Russell)
+    givenAHighlight(`Life Time (Foster, Russell)
 - Your Highlight on page 98 | location 2052-2052 | Added on Tuesday, 28 March 2023 13:43:14
 
 Roger Ekirch and detailed in his book At Day’s Close.
