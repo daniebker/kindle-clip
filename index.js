@@ -8,7 +8,7 @@ async function main() {
   const outPath = process.argv[3];
   const template = process.argv[4];
   const aiEnabled = process.argv[5] || false;
-  const highlights = parseFile(filePath);
+  const highlights = await parseFile(filePath);
 
   const groupedHighlights = groupByBook(highlights);
   const books = Object.keys(groupedHighlights);

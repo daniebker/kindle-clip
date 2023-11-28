@@ -3,11 +3,15 @@ const handlebars = require("handlebars");
 const { registerHelpers } = require("./infrastructure/handlebars/formatting");
 const {
   generateTitleAndTagsFor,
-  // getSummaryForBook,
+  generateTitleFor,
+  generateTagsFor,
+  generateTitleAndTagsFor,
+  getSummaryForBook,
 } = require(
   "./infrastructure/clients/openai",
 );
 const { clearHistory } = require("./infrastructure/ai/prompts");
+
 const {
   createOutputDirIfNotExists,
   findFileInDirectory,
@@ -35,7 +39,10 @@ function generateFileName(bookAndAuthor, format) {
   return `${timestamp}-${bookAndAuthor}.${format}`;
 }
 
-// TODO: decouple file writing and ai from this function
+/*
+ * It should write the highlights to an org file format
+ * @param {array} highlights - the highlights to write
+ */
 async function writeFile(books, outPath, templateName, aiEnabled) {
   createOutputDirIfNotExists(outPath);
 
@@ -87,15 +94,13 @@ async function writeFile(books, outPath, templateName, aiEnabled) {
 
     const preparedHighlights = await Promise.all(preparedHighlightsPromises);
 
-    //TODO: Use chatGPT give the context of all notes to create a summary of the book
-    // const summary = await getSummaryForBook();
-    // console.log(summary);
     const rawTemplate = fs.readFileSync(
       `./templates/${templateName}/content.hbs`,
       "utf-8",
     );
     const template = handlebars.compile(rawTemplate, { noEscape: true });
     clearHistory();
+    
     file.write(template(preparedHighlights));
     file.end();
   }

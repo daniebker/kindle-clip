@@ -1,5 +1,6 @@
 const crypto = require("crypto");
 const fs = require("fs");
+const { JSDOM } = require("jsdom");
 const { parsePageNumber } = require("./utils/parsePageNumber");
 
 /*
@@ -58,31 +59,23 @@ function parseLocation(info) {
 
 /*
  * Parse the file and extract the highlights
+ * Also works with html highlights.
  * @param {string} file - the file to parse
  * @returns {array} - the parsed highlights
  * @example
  * parseFile('~/Documents/My Clippings.txt')
  **/
-const parseFile = (file) => {
+const parseFile = async (file) => {
+  
+  if (file.includes('.txt')) {
   const fileContents = fs.readFileSync(file, "utf8");
-  const highlights = [];
-  const clippings = fileContents.split(`==========\r\n`);
-  clippings.forEach((clipping) => {
-    if (clipping.trim().length === 0) return;
-    const parsedHighlight = highlightParser(clipping);
-    if (parsedHighlight.type === "Bookmark") return;
-
-    if (parsedHighlight.type === "Highlight") {
-      highlights.push(parsedHighlight);
-    } else {
-      highlights[highlights.length - 1].note = {
-        content: parsedHighlight.content,
-        date: parsedHighlight.date,
-      };
-    }
-  });
-
-  return highlights;
+    return parseHighlightsTxt(fileContents);
+  }
+  else if (file.includes('.html')) {
+    const fileContents = await JSDOM.fromFile(file);
+    return parseHighlightsHtml(fileContents);
+  }
+  return [];
 };
 
 const highlightParser = (clipping) => {
@@ -111,3 +104,48 @@ const highlightParser = (clipping) => {
 };
 
 module.exports = { parseFile };
+
+/**
+ * Parses a kindle highlights txt file
+ * @param {string} fileContents 
+ * @returns array of highlights
+ */
+const parseHighlightsTxt = (fileContents) => {
+  const highlights = [];
+  const clippings = fileContents.split(`==========\r\n`);
+  clippings.forEach((clipping) => {
+    if (clipping.trim().length === 0) return;
+    const parsedHighlight = highlightParser(clipping);
+    if (parsedHighlight.type === "Bookmark") return;
+
+    if (parsedHighlight.type === "Highlight") {
+      highlights.push(parsedHighlight);
+    } else {
+      highlights[highlights.length - 1].note = {
+        content: parsedHighlight.content,
+        date: parsedHighlight.date,
+      };
+    }
+  });
+  return highlights;
+}
+
+/**
+ * Parses a kindle highlights html file
+ * @param {string} fileContents 
+ * @returns array of highlights
+ */
+const parseHighlightsHtml = (fileContents) => {
+  const document = fileContents.window.document;
+  const title = document.querySelector(".bookTitle").textContent.trim();
+  const authorsDOMElement = document.querySelector(".authors");
+  const authors = authorsDOMElement.textContent.split(";").map((author) => {
+    const [surname, firstName] = author.trim().split(",");
+    return { firstName: firstName.trim(), surname: surname.trim()};
+  });
+  return [{
+    title,
+  author: authors[0],
+  }]
+}
+
