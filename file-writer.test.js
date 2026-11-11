@@ -1,4 +1,4 @@
-const { writeFile } = require("./org-writer");
+const { writeFile } = require("./file-writer");
 const fs = require("fs");
 
 jest.mock("./utils/dir", () => ({
@@ -10,7 +10,15 @@ jest.spyOn(fs, "createWriteStream").mockImplementation(() => {
   return { write: jest.fn(), end: jest.fn() };
 });
 
-jest.spyOn(fs, "readFileSync").mockImplementation(() => {});
+// Serve the real templates from disk; anything else (an existing output
+// file) is treated as empty.
+const realReadFileSync = fs.readFileSync;
+jest.spyOn(fs, "readFileSync").mockImplementation((path, ...args) => {
+  if (String(path).startsWith("./templates/")) {
+    return realReadFileSync(path, ...args);
+  }
+  return "";
+});
 const dir = require("./utils/dir");
 
 beforeEach(() => {
@@ -27,20 +35,20 @@ const givenABookWithHighlights = () => {
   };
 };
 
-describe("org-writer", () => {
+describe("file-writer", () => {
   describe("writeFile", () => {
-    it("should create dir if non exists", () => {
+    it("should create dir if non exists", async () => {
       const groupedHighlights = givenABookWithHighlights();
 
-      writeFile(groupedHighlights, "/some/path");
+      await writeFile(groupedHighlights, "/some/path", "org-roam");
 
       expect(dir.createOutputDirIfNotExists).toHaveBeenCalledWith("/some/path");
     });
 
-    it("should write to file", () => {
+    it("should write to file", async () => {
       const groupedHighlights = givenABookWithHighlights();
 
-      writeFile(groupedHighlights, "~/some/path");
+      await writeFile(groupedHighlights, "~/some/path", "org-roam");
 
       expect(fs.createWriteStream).toHaveBeenCalledWith(
         expect.stringContaining(
@@ -50,14 +58,14 @@ describe("org-writer", () => {
       );
     });
 
-    it("should append to an existing file when one exists", () => {
+    it("should append to an existing file when one exists", async () => {
       const groupedHighlights = givenABookWithHighlights();
 
       dir.findFileInDirectory.mockReturnValueOnce(
         "1231231231_somesurname_somefirstname_The_Book_of_Why.org"
       );
 
-      writeFile(groupedHighlights, "~/some/path");
+      await writeFile(groupedHighlights, "~/some/path", "org-roam");
 
       expect(fs.readFileSync).toHaveBeenCalledWith(
         "~/some/path/1231231231_somesurname_somefirstname_The_Book_of_Why.org",
