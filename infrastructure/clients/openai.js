@@ -1,6 +1,8 @@
 const { OpenAI } = require("openai");
 const { generatePrompt } = require("../ai/prompts")
 
+const DEFAULT_MODEL = "gpt-6-luna";
+
 let openai;
 
 function getClient() {
@@ -21,12 +23,13 @@ async function generateTitleFor(text) {
   }
 
   try {
-    const completion = await client.completions.create({
-      model: "text-curie-001",
-      prompt: generatePrompt(text),
-      temperature: 0.6,
+    const completion = await client.chat.completions.create({
+      model: process.env.OPENAI_MODEL || DEFAULT_MODEL,
+      messages: [{ role: "user", content: generatePrompt(text) }],
+      // Title generation is a simple task: skip reasoning to keep it fast and cheap.
+      reasoning_effort: "none",
     });
-    return completion.choices[0].text
+    return (completion.choices[0].message.content || "").trim()
   } catch (error) {
     if (error instanceof OpenAI.APIError) {
       console.error(error.status, error.message);
